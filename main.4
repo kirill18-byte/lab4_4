@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <cstdlib>
 using namespace std;
 
 // -------------------- Proc7 --------------------
@@ -17,7 +18,7 @@ void InvDigits(int &K)
 
 void Task7()
 {
-    int numbers[5]; // масив для 5 чисел
+    int numbers[5];
 
     cout << "Введіть 5 цілих додатних чисел (0 < K < 10000):\n";
     for (int i = 0; i < 5; i++)
@@ -25,7 +26,6 @@ void Task7()
         cin >> numbers[i];
     }
 
-    // Зворотний порядок цифр у кожному числі
     for (int i = 0; i < 5; i++)
     {
         InvDigits(numbers[i]);
@@ -36,59 +36,30 @@ void Task7()
     {
         cout << numbers[i] << " ";
     }
-
     cout << endl;
 }
 
-// -------------------- Proc14 --------------------
-// Процедура правого циклічного зсуву
-void ShiftRight3(double &A, double &B, double &C)
-{
-    double temp = C; // тимчасова змінна
-    C = B;
-    B = A;
-    A = temp;
-}
 
-void Task14()
-{
-    double A1, B1, C1;
-    double A2, B2, C2;
-
-    cout << "Введіть три числа (A1, B1, C1): ";
-    cin >> A1 >> B1 >> C1;
-
-    cout << "Введіть три числа (A2, B2, C2): ";
-    cin >> A2 >> B2 >> C2;
-
-    ShiftRight3(A1, B1, C1);
-    ShiftRight3(A2, B2, C2);
-
-    cout << "\nПісля зсуву (A1, B1, C1): " << A1 << " " << B1 << " " << C1 << endl;
-    cout << "Після зсуву (A2, B2, C2): " << A2 << " " << B2 << " " << C2 << endl;
-}
 
 // -------------------- Proc46 --------------------
 // Функція, що визначає, чи перетинаються два кола
 bool CircleIntersect(double x1, double y1, double R1,
                      double x2, double y2, double R2)
 {
-    double d = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)); // відстань між центрами
-    return (fabs(R1 - R2) <= d && d <= R1 + R2); // умова перетину
+    double d = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+    return (fabs(R1 - R2) <= d && d <= R1 + R2);
 }
 
 void Task46()
 {
     cout << "Перевірка трьох пар кіл:\n";
 
-    // --- Три пари кіл ---
     double data[3][6] = {
-        {0, 0, 5, 6, 0, 3},   // Перетинаються
-        {0, 0, 2, 10, 10, 3}, // Не перетинаються
-        {1, 1, 4, 3, 4, 4}    // Перетинаються
+        {0, 0, 5, 6, 0, 3},
+        {0, 0, 2, 10, 10, 3},
+        {1, 1, 4, 3, 4, 4}
     };
 
-    // Перевірка трьох пар
     for (int i = 0; i < 3; i++)
     {
         bool result = CircleIntersect(
@@ -97,45 +68,58 @@ void Task46()
         );
 
         cout << "Пара " << i + 1 << ": "
-             << (result ? "True (перетинаються)" : "False (не перетинаються)") << endl;
+             << (result ? "True (перетинаються)" : "False (не перетинаються)")
+             << endl;
     }
 }
 
-// -------------------- Головне меню --------------------
+
+
+// -------------------- Integer14 --------------------
+// Переносить останню цифру тризначного числа вліво
+void MoveLastDigitLeft(int &N)
+{
+    int units = N % 10;
+    int rest  = N / 10;
+    N = units * 100 + rest;
+}
+
+void Task14()
+{
+    int N;
+    cout << "Введіть тризначне число: ";
+    cin >> N;
+
+    if (N < 100 || N > 999)
+    {
+        cout << "Помилка: число повинно бути тризначним." << endl;
+        return;
+    }
+
+    MoveLastDigitLeft(N);
+
+    cout << "Отримане число: " << N << endl;
+}
+
+
+
 int main()
 {
+    cout << "Виберіть задачу:\n";
+    cout << "1 — Task7 (інверсія цифр у 5 числах)\n";
+    cout << "2 — Task46 (перетин кіл)\n";
+    cout << "3 — Integer14 (перенесення правої цифри наліво)\n\n";
+
     int choice;
+    cin >> choice;
 
-    do
+    switch (choice)
     {
-        cout << "\n==================== МЕНЮ ====================\n";
-        cout << "1. Proc7 – Зворотний порядок цифр\n";
-        cout << "2. Proc14 – Правий циклічний зсув\n";
-        cout << "3. Proc46 – Перевірка перетину кіл\n";
-        cout << "Ваш вибір: ";
-        cin >> choice;
-        cout << endl;
-
-        switch (choice)
-        {
-        case 1:
-            Task7();
-            break;
-        case 2:
-            Task14();
-            break;
-        case 3:
-            Task46();
-            break;
-        case 0:
-            cout << "Вихід із програми..." << endl;
-            break;
-        default:
-            cout << "Помилка: невірний вибір!" << endl;
-            break;
-        }
-
-    } while (choice != 0);
+        case 1: Task7(); break;
+        case 2: Task46(); break;
+        case 3: Task14(); break;
+        default: cout << "Невірний вибір!"; break;
+    }
 
     return 0;
 }
